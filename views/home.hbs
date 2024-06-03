@@ -1,14 +1,25 @@
-<h1>Home</h1>
-<p>This is the {{ title }} page</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height= device-height, initial-scale=1.0">
+  <title>Chat Rooms</title>
+</head>
+<body>
+  <div class="all-home-content">
+    <h1>Home</h1>
 
-<form action="/create" method="post">
-  <input type="text" name="roomName" placeholder="Enter Room Name" required>
-  <button type="submit">Create Room</button>
-</form>
+    <form action="/create" method="post">
+      <input type="text" name="roomName" placeholder="Enter Room Name" required>
+      <button type="submit">Create Room</button>
+    </form>
 
-<h2>Available Chatrooms</h2>
-<ul>
-  {{#each chatrooms}}
-    <li><a href="/{{this.roomName}}">{{this.roomName}}</a></li>
-  {{/each}}
-</ul>
+    <h2>Available Chatrooms</h2>
+    <ul>
+      {{#each chatrooms}}
+        <a class="chatroom-link" href="/{{this.roomName}}">{{this.roomName}}</a>
+      {{/each}}
+    </ul>
+  </div>
+</body>
+</html>

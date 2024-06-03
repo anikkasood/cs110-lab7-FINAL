@@ -55,64 +55,68 @@ app.set('view engine', 'hbs');
 // Create controller handlers to handle requests at each endpoint
 app.get('/', homeHandler.getHome);
 app.get('/:roomName', roomHandler.getRoom);
-
-// make a new room
-app.post('/create', async (req, res) => {
-  try {
-    const roomName = req.body.roomName || roomHandler.roomIdGenerator();
-    const existingRoom = await app.locals.db.collection("chatrooms").findOne({ roomName });
-    if (!existingRoom) {
-      await app.locals.db.collection("rooms").insertOne({ roomName, messages: [] });
-    }
-    res.redirect(`/${roomName}`);
-  } catch (error) {
-    console.error("Error creating chatroom:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+app.post('/create', homeHandler.makeRoom);
+app.get('/:roomName/messages', homeHandler.getMsgRoom);
+app.post('/:roomName/messages', homeHandler.postToRoom);
 
 
-
-// get messages for room
-app.get('/:roomName/messages', async (req, res) => {
-  const roomName = req.params.roomName;
-  const room = await app.locals.db.collection("rooms").findOne({ roomName });
-  res.json(room ? room.messages : []);
-});
-
-
-// app.get('/rooms/:_id', async (req, res) => {
-//     try {
-//       const roomId = req.params._id;
-//       console.log('Requested Room Id: ', roomId);
-
-//       const roomMSG = await Room.findById(roomId).populate('messages');
-//       if (!roomMSG) {
-//         return res.status(404).json({ message: 'Room not found' });
-//       }
-
-//       res.json(roomMSG);
-//       //accessing the array of messages
-//       const messages = roomMSG.messages;
-//       //res.json(messages);
-//       console.log(messages);
-
-//     } catch (err) {
-//       res.status(500).json({ error: err.message });
+// // make a new room
+// app.post('/create', async (req, res) => {
+//   try {
+//     const roomName = req.body.roomName || roomHandler.roomIdGenerator();
+//     const existingRoom = await app.locals.db.collection("chatrooms").findOne({ roomName });
+//     if (!existingRoom) {
+//       await app.locals.db.collection("rooms").insertOne({ roomName, messages: [] });
 //     }
+//     res.redirect(`/${roomName}`);
+//   } catch (error) {
+//     console.error("Error creating chatroom:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
 // });
 
 
-//post messages to a chatroom
-app.post('/:roomName/messages', async (req, res) => {
-  const roomName = req.params.roomName;
-  const { user, content, time } = req.body;
-  await app.locals.db.collection("rooms").updateOne(
-    { roomName },
-    { $push: { messages: { user, content, time } } }
-  );
-  res.sendStatus(200);
-});
+
+// // get messages for room
+// app.get('/:roomName/messages', async (req, res) => {
+//   const roomName = req.params.roomName;
+//   const room = await app.locals.db.collection("rooms").findOne({ roomName });
+//   res.json(room ? room.messages : []);
+// });
+
+
+// // app.get('/rooms/:_id', async (req, res) => {
+// //     try {
+// //       const roomId = req.params._id;
+// //       console.log('Requested Room Id: ', roomId);
+
+// //       const roomMSG = await Room.findById(roomId).populate('messages');
+// //       if (!roomMSG) {
+// //         return res.status(404).json({ message: 'Room not found' });
+// //       }
+
+// //       res.json(roomMSG);
+// //       //accessing the array of messages
+// //       const messages = roomMSG.messages;
+// //       //res.json(messages);
+// //       console.log(messages);
+
+// //     } catch (err) {
+// //       res.status(500).json({ error: err.message });
+// //     }
+// // });
+
+
+// //post messages to a chatroom
+// app.post('/:roomName/messages', async (req, res) => {
+//   const roomName = req.params.roomName;
+//   const { user, content, time } = req.body;
+//   await app.locals.db.collection("rooms").updateOne(
+//     { roomName },
+//     { $push: { messages: { user, content, time } } }
+//   );
+//   res.sendStatus(200);
+// });
 
 
 // NOTE: This is the sample server.js code we provided, feel free to change the structures
