@@ -29,7 +29,7 @@ async function connectToDatabase() {
     }
 
     // Start the server after the database connection is established
-    app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
+    //app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
   } catch (err) {
     console.error("Failed to connect to MongoDB", err);
     process.exit(1);
