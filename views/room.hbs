@@ -12,8 +12,8 @@
 
 <div id="messages"></div>
 <form id="message-form">
-  <input type="text" name="nickname" placeholder="Your nickname" required />
-  <input type="text" name="message" placeholder="Type your message here" required />
+  <input type="text" id="user" name="user" placeholder="Your nickname" required />
+  <input type="text" id="content" name="content" placeholder="Type your message here" required />
   <button type="submit">Send</button>
 </form>
 
@@ -30,6 +30,7 @@
       const messageElement = document.createElement('div');
       messageElement.innerHTML = `<strong>${message.user}</strong>: ${message.content} <em>(${message.time})</em>`;
       messagesDiv.appendChild(messageElement);
+      console.log(messageElement);
     });
   }
 
