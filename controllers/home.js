@@ -36,7 +36,7 @@ async function getHome(request, response) {
 async function makeRoom(req, res){
   try {
     const roomName = req.body.roomName || roomHandler.roomIdGenerator();
-    const existingRoom = await app.locals.db.collection("chatrooms").findOne({ roomName });
+    const existingRoom = await req.app.locals.db.collection("chatrooms").findOne({ roomName });
     if (!existingRoom) {
       await app.locals.db.collection("rooms").insertOne({ roomName, messages: [] });
     }
@@ -83,7 +83,7 @@ async function getMsgRoom (req, res){
 async function postToRoom(req, res){
   const roomName = req.params.roomName;
   const { user, content, time } = req.body;
-  await app.locals.db.collection("rooms").updateOne(
+  await req.app.locals.db.collection("rooms").updateOne(
     { roomName },
     { $push: { messages: { user, content, time } } }
   );

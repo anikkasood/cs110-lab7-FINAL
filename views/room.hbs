@@ -5,52 +5,60 @@
 </p>
 <p>To generate a new room, here is the room id: {{ newRoomId }}</p>
  --}}
+<div class="container">
+  <div class="title">
+    <h1>Room {{ roomName }}</h1>
+    <p>This is a demo of chatroom page</p>
+    <button><a href="/">Home</a></button>
+  </div>
+
+  <div id="messages"></div>
+  <div class="message">
+    <form id="message-form">
+      <input type="text" id="user" name="user" placeholder="Your nickname" required />
+      <input type="text" id="content" name="content" placeholder="Type your message here" required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</div>
 
 
-<h1>Room {{ roomName }}</h1>
-<p>This is a demo of chatroom page</p>
+    <script src="/scripts/index.js"></script>
+    <script>
+      const roomName = "{{ roomName }}";
 
-<div id="messages"></div>
-<form id="message-form">
-  <input type="text" id="user" name="user" placeholder="Your nickname" required />
-  <input type="text" id="content" name="content" placeholder="Type your message here" required />
-  <button type="submit">Send</button>
-</form>
+      async function fetchMessages() {
+        const response = await fetch(`/${roomName}/messages`);
+        const messages = await response.json();
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.innerHTML = '';
+        messages.forEach(message => {
+          const messageElement = document.createElement('div');
+          messageElement.innerHTML = `<strong>${message.user}</strong>: ${message.content} <em>(${message.time})</em>`;
+          messagesDiv.appendChild(messageElement);
+          console.log(messageElement);
+        });
+      }
 
-<script src="/scripts/index.js"></script>
-<script>
-  const roomName = "{{ roomName }}";
+      fetchMessages();
+      setInterval(fetchMessages, 3000);
 
-  async function fetchMessages() {
-    const response = await fetch(`/${roomName}/messages`);
-    const messages = await response.json();
-    const messagesDiv = document.getElementById('messages');
-    messagesDiv.innerHTML = '';
-    messages.forEach(message => {
-      const messageElement = document.createElement('div');
-      messageElement.innerHTML = `<strong>${message.user}</strong>: ${message.content} <em>(${message.time})</em>`;
-      messagesDiv.appendChild(messageElement);
-      console.log(messageElement);
-    });
-  }
+      document.getElementById('message-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const user = form.user.value;
+        const content = form.message.value;
+        const time = new Date().toLocaleString();
 
-  fetchMessages();
-  setInterval(fetchMessages, 3000);
+        await fetch(`/${roomName}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user, content, time })
+        });
 
-  document.getElementById('message-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const user = form.user.value;
-    const content = form.message.value;
-    const time = new Date().toLocaleString();
-
-    await fetch(`/${roomName}/messages`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user, content, time })
-    });
-
-    form.message.value = '';
-    fetchMessages();
-  });
-</script>
+        form.message.value = '';
+        fetchMessages();
+      });
+    </script>
+  </div>
+</div>
