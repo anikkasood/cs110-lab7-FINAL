@@ -6,7 +6,7 @@
 
 async function getHome(request, response) {
   try {
-    const chatroomsCursor = await request.app.locals.db.collection("chatrooms").find();
+    const chatroomsCursor = await request.app.locals.db.collection("rooms").find();
     const chatrooms = await chatroomsCursor.toArray();
     const uniqueChatrooms = [...new Map(chatrooms.map(item => [item['roomName'], item])).values()];
     response.render('home', { title: 'Home', chatrooms: uniqueChatrooms });
