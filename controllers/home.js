@@ -36,9 +36,9 @@ async function getHome(request, response) {
 async function makeRoom(req, res){
   try {
     const roomName = req.body.roomName || roomHandler.roomIdGenerator();
-    const existingRoom = await req.app.locals.db.collection("chatrooms").findOne({ roomName });
+    const existingRoom = await req.app.locals.db.collection("rooms").findOne({ roomName });
     if (!existingRoom) {
-      await app.locals.db.collection("rooms").insertOne({ roomName, messages: [] });
+      await req.app.locals.db.collection("rooms").insertOne({ roomName, messages: [] });
     }
     res.redirect(`/${roomName}`);
   } catch (error) {

@@ -7,20 +7,18 @@
 </head>
 <body>
   <div class="all-home-content">
-    <div class = "container"><h1>Home</h1> </div>
+    <h1>Home</h1>
 
     <form action="/create" method="post">
       <input type="text" name="roomName" placeholder="Enter Room Name" required>
       <button type="submit">Create Room</button>
     </form>
-    <div class = "container">
       <h2>Available Chatrooms</h2>
     <ul>
       {{#each chatrooms}}
         <a class="chatroom-link" href="/{{this.roomName}}">{{this.roomName}}</a>
       {{/each}}
     </ul>
-    </div>
     
   </div>
 </body>
